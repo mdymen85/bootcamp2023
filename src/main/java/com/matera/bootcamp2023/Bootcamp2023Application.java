@@ -1,7 +1,11 @@
 package com.matera.bootcamp2023;
 
+import com.matera.bootcamp2023.carteira.Conta;
+import com.matera.bootcamp2023.carteira.Titular;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.math.BigDecimal;
 
 //@SpringBootApplication
 public class Bootcamp2023Application {
@@ -10,22 +14,34 @@ public class Bootcamp2023Application {
 
 	public static void main(String[] args) {
 
-		var pj = new PessoaPJ();
-		pj.setCnpj("234324");
+		var titular1 = new Titular("Mamedio", "12345678");
 
-		var pf = new PessoaPF();
-		pf.setCpf("234324");
-
-//		var p = new Pessoa();
+		var conta1 = new Conta(1,2, BigDecimal.ZERO, titular1);
+		var conta2 = new Conta(3,4, BigDecimal.ONE, titular1);
 
 
-		var fiat = new Fiat("Siena", 2015);
+		titular1.adicionarConta(conta1);
+		titular1.adicionarConta(conta2);
 
-		System.out.println("fiat é velho = " + fiat.isVelho());
+		titular1.mostrarContas();
 
-		var chevrolet = new Chevrolet("Prisma", 2017);
 
-		System.out.println("chevrolet é velho = " + chevrolet.isVelho());
+//		var pj = new PessoaPJ();
+//		pj.setCnpj("234324");
+//
+//		var pf = new PessoaPF();
+//		pf.setCpf("234324");
+//
+////		var p = new Pessoa();
+//
+//
+//		var fiat = new Fiat("Siena", 2015);
+//
+//		System.out.println("fiat é velho = " + fiat.isVelho());
+//
+//		var chevrolet = new Chevrolet("Prisma", 2017);
+//
+//		System.out.println("chevrolet é velho = " + chevrolet.isVelho());
 
 //
 //		String nome = "Rosa";
