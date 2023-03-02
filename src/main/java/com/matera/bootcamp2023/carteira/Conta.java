@@ -10,6 +10,8 @@ public class Conta {
     private BigDecimal saldo;
     private Titular titular;
 
+    public Conta() {}
+
     public Conta(int agencia, int numero, BigDecimal saldo, Titular titular) {
         this.agencia = agencia;
         this.numero = numero;

@@ -1,11 +1,13 @@
 package com.matera.bootcamp2023;
 
 import com.matera.bootcamp2023.carteira.Conta;
+import com.matera.bootcamp2023.carteira.Servico;
 import com.matera.bootcamp2023.carteira.Titular;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.util.*;
 
 //@SpringBootApplication
 public class Bootcamp2023Application {
@@ -14,16 +16,53 @@ public class Bootcamp2023Application {
 
 	public static void main(String[] args) {
 
+		var servico = new Servico();
+
+		var optConta = servico.contaMisteriosa();
+
 		var titular1 = new Titular("Mamedio", "12345678");
+//		var conta = optConta.orElse(new Conta(3,4, BigDecimal.ONE, titular1));
+		var conta = optConta.orElseThrow();
 
-		var conta1 = new Conta(1,2, BigDecimal.ZERO, titular1);
-		var conta2 = new Conta(3,4, BigDecimal.ONE, titular1);
+		if (Objects.isNull(conta)) {
+
+		}
+
+//		if (optConta != null) {
+//			System.out.println(optConta.getAgencia());
+//		}
+
+//		Map<String, Long> mapa = new HashMap<String, Long>();
+//		mapa.put("Campinas", 1_500_000L);
+//		mapa.put("Riberao Preto", 500_000L);
+//		mapa.put("Rio das Ostras", 30_000L);
+//
+//		var populacao = mapa.get("Rio das Ostras");
+//
+//
+//		var keys = mapa.keySet();
+//
+//		var it = keys.iterator();
+//
+//		// ["Riberao Preto", "Rio das Ostras", "Campinas"]
+//
+//		while (it.hasNext()) {
+//			var cidade = it.next();
+//			//System.out.println(it.next());
+//		}
 
 
-		titular1.adicionarConta(conta1);
-		titular1.adicionarConta(conta2);
 
-		titular1.mostrarContas();
+//		var titular1 = new Titular("Mamedio", "12345678");
+//
+//		var conta1 = new Conta(1,2, BigDecimal.ZERO, titular1);
+//		var conta2 = new Conta(3,4, BigDecimal.ONE, titular1);
+//
+//
+//		titular1.adicionarConta(conta1);
+//		titular1.adicionarConta(conta2);
+//
+//		titular1.mostrarContas();
 
 
 //		var pj = new PessoaPJ();
