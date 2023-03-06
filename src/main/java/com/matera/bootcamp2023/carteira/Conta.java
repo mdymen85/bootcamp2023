@@ -1,6 +1,8 @@
 package com.matera.bootcamp2023.carteira;
 
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
 public class Conta {

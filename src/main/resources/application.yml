@@ -1,0 +1,15 @@
+#spring:
+#  application:
+#    name: bootcamp
+
+outro-servico:
+  url: http://oqueseja.com/
+  user: userOqueseja
+  password: pass
+
+parte1:
+  parte2: x
+  parte3: b
+  parte4:
+    parte5: x
+

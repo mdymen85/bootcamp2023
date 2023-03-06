@@ -1,15 +1,19 @@
 package com.matera.bootcamp2023;
 
+import lombok.*;
+
+//@Data
+//@Builder
 public class PessoaPF extends Pessoa {
 
     private String cpf;
+    private String nome;
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    @Override
+    public String toString() {
+        return "PessoaPF{" +
+                "cpf=" + cpf +
+                ", nome=" + nome +
+                '}';
     }
-
-    public String getCpf() {
-        return this.cpf;
-    }
-
 }
