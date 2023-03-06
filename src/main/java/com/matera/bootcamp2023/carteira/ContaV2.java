@@ -7,21 +7,15 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Getter @Setter
-public class Conta {
+public class ContaV2 {
 
     private int agencia;
     private int numero;
     private BigDecimal saldo;
-    private Titular titular;
+    private TitularV2 titular;
 
-    public Conta() {}
+    public ContaV2() {}
 
-    public Conta(int agencia, int numero, BigDecimal saldo, Titular titular) {
-        this.agencia = agencia;
-        this.numero = numero;
-        this.saldo = saldo;
-        this.titular = titular;
-    }
 
     //credito, debito
     public void credito(BigDecimal valor) {

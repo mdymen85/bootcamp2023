@@ -8,11 +8,12 @@ import java.util.List;
 
 @Getter @Setter
 @Builder
-public class Titular {
+public class TitularV2 {
 
     private String nome;
-    private String cpf;
+    private String cpfCnpj;
     private List<Conta> contas;
+    private String senha;
 
     public void mostrarContas() {
         //for, while, foreach, stream
