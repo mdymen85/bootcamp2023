@@ -1,27 +1,37 @@
 package com.matera.bootcamp2023.carteira;
 
 
+import com.matera.bootcamp2023.dto.ContaDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Entity
+//@Table(name = "bootcamp_conta")
 @Getter @Setter
 public class Conta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private int agencia;
     private int numero;
     private BigDecimal saldo;
-    private Titular titular;
+    private String senha;
+
 
     public Conta() {}
 
-    public Conta(int agencia, int numero, BigDecimal saldo, Titular titular) {
-        this.agencia = agencia;
-        this.numero = numero;
-        this.saldo = saldo;
-        this.titular = titular;
-    }
+
 
     //credito, debito
     public void credito(BigDecimal valor) {
@@ -78,6 +88,14 @@ public class Conta {
     private boolean valorIncorreto(BigDecimal valor) {
         //NPE
         return valor.compareTo(BigDecimal.ZERO) <= 0;
+    }
+
+    public ContaDto toContaDto(){
+        ContaDto dto = new ContaDto();
+        dto.setAgencia(this.getAgencia());
+        dto.setNumero(this.getNumero());
+        dto.setSaldo(this.getSaldo());
+        return dto;
     }
 
 
