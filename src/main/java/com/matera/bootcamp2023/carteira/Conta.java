@@ -4,19 +4,21 @@ package com.matera.bootcamp2023.carteira;
 import com.matera.bootcamp2023.dto.ContaDto;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Entity
 //@Table(name = "bootcamp_conta")
-@Getter @Setter
+@Getter
+@Setter
 public class Conta {
 
     @Id
@@ -24,13 +26,27 @@ public class Conta {
     private Long id;
 
     private int agencia;
-    private int numero;
-    private BigDecimal saldo;
-    private String senha;
+    private int numero = new Random().nextInt(100000);
+    private BigDecimal saldo = BigDecimal.ZERO;
 
+    @CreationTimestamp
+    private LocalDateTime dataCriacao;
+    @UpdateTimestamp
+    private LocalDateTime dataUltimaAtualizacao;
 
-    public Conta() {}
+    @ManyToOne
+    @JoinColumn(name = "nome_coluna_titular_id")
+    private Titular titular;
 
+    @ManyToMany
+    @JoinTable(name = "conta_tipos_tarifa",
+            joinColumns = @JoinColumn(name = "conta_id"),
+            inverseJoinColumns = @JoinColumn(name = "tipo_tarifa_id")
+    )
+    private List<TipoTarifa> tiposTarifa = new ArrayList<>();
+
+    public Conta() {
+    }
 
 
     //credito, debito
@@ -71,6 +87,7 @@ public class Conta {
 
     /**
      * este metodo...
+     *
      * @param valor
      */
     private void validar(BigDecimal valor) {
@@ -90,14 +107,13 @@ public class Conta {
         return valor.compareTo(BigDecimal.ZERO) <= 0;
     }
 
-    public ContaDto toContaDto(){
+    public ContaDto toContaDto() {
         ContaDto dto = new ContaDto();
         dto.setAgencia(this.getAgencia());
         dto.setNumero(this.getNumero());
         dto.setSaldo(this.getSaldo());
         return dto;
     }
-
 
 
 }
