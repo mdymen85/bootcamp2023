@@ -1,6 +1,6 @@
 package com.matera.bootcamp2023.repository;
 
-import com.matera.bootcamp2023.carteira.TipoTarifa;
+import com.matera.bootcamp2023.domain.TipoTarifa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

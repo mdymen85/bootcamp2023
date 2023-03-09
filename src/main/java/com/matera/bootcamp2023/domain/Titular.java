@@ -1,8 +1,7 @@
-package com.matera.bootcamp2023.carteira;
+package com.matera.bootcamp2023.domain;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -25,6 +24,7 @@ public class Titular {
     @JoinColumn(referencedColumnName = "id")
     private Endereco endereco;
 
+    //    @JsonIgnore
     @OneToMany(mappedBy = "titular")
     private List<Conta> contas = new ArrayList<>();
 

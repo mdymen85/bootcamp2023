@@ -1,9 +1,13 @@
-package com.matera.bootcamp2023.carteira;
+package com.matera.bootcamp2023.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matera.bootcamp2023.dto.ContaDto;
+import com.matera.bootcamp2023.exceptions.SaldoInsuficienteException;
+import com.matera.bootcamp2023.exceptions.ValorInvalidoException;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,11 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @Entity
 //@Table(name = "bootcamp_conta")
 @Getter
 @Setter
-public class Conta {
+public class Conta implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +34,15 @@ public class Conta {
     private int numero = new Random().nextInt(100000);
     private BigDecimal saldo = BigDecimal.ZERO;
 
+    @Embedded
+    private Banco banco;
+
     @CreationTimestamp
     private LocalDateTime dataCriacao;
     @UpdateTimestamp
     private LocalDateTime dataUltimaAtualizacao;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "nome_coluna_titular_id")
     private Titular titular;
@@ -51,17 +60,14 @@ public class Conta {
 
     //credito, debito
     public void credito(BigDecimal valor) {
-
         this.validar(valor);
-
-        saldo.add(valor);
-
+        saldo = saldo.add(valor);
+        log.info("Conta {}/{} foi creditada com {} valor.",
+                this.agencia, this.numero, valor);
     }
 
     public void debito(BigDecimal valor) {
-
         this.validar(valor);
-
         // -1 se for menor
         // 0 se for igual
         // 1 se for maior
@@ -78,11 +84,11 @@ public class Conta {
         //if (1 > 0) { sim entro }
 
         if (valor.compareTo(saldo) > 0) {
-            throw new RuntimeException();
+            throw new SaldoInsuficienteException("Conta não tem saldo para atender a solicitacao");
         }
-
-        saldo.subtract(valor);
-
+        saldo = saldo.subtract(valor);
+        log.info("Conta {}/{} foi debitada com {} valor.",
+                this.agencia, this.numero, valor);
     }
 
     /**
@@ -91,15 +97,14 @@ public class Conta {
      * @param valor
      */
     private void validar(BigDecimal valor) {
-
+        final String mensagem = String.format("O valor %s é inválido.", valor);
         if (valor == null) {
-            throw new RuntimeException();
+            throw new ValorInvalidoException(mensagem);
         }
 
         if (this.valorIncorreto(valor)) {
-            throw new RuntimeException();
+            throw new ValorInvalidoException(mensagem);
         }
-
     }
 
     private boolean valorIncorreto(BigDecimal valor) {

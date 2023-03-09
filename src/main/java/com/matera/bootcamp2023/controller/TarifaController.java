@@ -1,6 +1,6 @@
 package com.matera.bootcamp2023.controller;
 
-import com.matera.bootcamp2023.carteira.TipoTarifa;
+import com.matera.bootcamp2023.domain.TipoTarifa;
 import com.matera.bootcamp2023.repository.TipoTarifaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
