@@ -2,7 +2,8 @@ package com.matera.bootcamp2023.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.matera.bootcamp2023.dto.ContaDto;
+import com.matera.bootcamp2023.dto.ContaResponseDto;
+import com.matera.bootcamp2023.dto.PixBacenDto;
 import com.matera.bootcamp2023.exceptions.SaldoInsuficienteException;
 import com.matera.bootcamp2023.exceptions.ValorInvalidoException;
 import lombok.Getter;
@@ -29,12 +30,11 @@ public class Conta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private int agencia;
     private int numero = new Random().nextInt(100000);
     private BigDecimal saldo = BigDecimal.ZERO;
-
-    @Embedded
+    private String pix;
+    @ManyToOne
     private Banco banco;
 
     @CreationTimestamp
@@ -48,10 +48,7 @@ public class Conta implements Serializable {
     private Titular titular;
 
     @ManyToMany
-    @JoinTable(name = "conta_tipos_tarifa",
-            joinColumns = @JoinColumn(name = "conta_id"),
-            inverseJoinColumns = @JoinColumn(name = "tipo_tarifa_id")
-    )
+    @JoinTable(name = "conta_tipos_tarifa", joinColumns = @JoinColumn(name = "conta_id"), inverseJoinColumns = @JoinColumn(name = "tipo_tarifa_id"))
     private List<TipoTarifa> tiposTarifa = new ArrayList<>();
 
     public Conta() {
@@ -62,8 +59,7 @@ public class Conta implements Serializable {
     public void credito(BigDecimal valor) {
         this.validar(valor);
         saldo = saldo.add(valor);
-        log.info("Conta {}/{} foi creditada com {} valor.",
-                this.agencia, this.numero, valor);
+        log.info("Conta {}/{} foi creditada com {} valor.", this.agencia, this.numero, valor);
     }
 
     public void debito(BigDecimal valor) {
@@ -87,8 +83,7 @@ public class Conta implements Serializable {
             throw new SaldoInsuficienteException("Conta não tem saldo para atender a solicitacao");
         }
         saldo = saldo.subtract(valor);
-        log.info("Conta {}/{} foi debitada com {} valor.",
-                this.agencia, this.numero, valor);
+        log.info("Conta {}/{} foi debitada com {} valor.", this.agencia, this.numero, valor);
     }
 
     /**
@@ -112,11 +107,21 @@ public class Conta implements Serializable {
         return valor.compareTo(BigDecimal.ZERO) <= 0;
     }
 
-    public ContaDto toContaDto() {
-        ContaDto dto = new ContaDto();
+    public ContaResponseDto toContaDto() {
+        ContaResponseDto dto = new ContaResponseDto();
         dto.setAgencia(this.getAgencia());
         dto.setNumero(this.getNumero());
         dto.setSaldo(this.getSaldo());
+        dto.setChavePix(this.getPix());
+        return dto;
+    }
+
+    public PixBacenDto toBacenDto() {
+        PixBacenDto dto = new PixBacenDto();
+        dto.setAgencia(this.agencia);
+        dto.setNumero(this.numero);
+        dto.setChave(this.pix);
+        dto.setCpf(this.titular.getCpf());
         return dto;
     }
 

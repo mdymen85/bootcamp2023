@@ -10,4 +10,6 @@ public class ContaRequestDto {
     private int agencia;
     private String nome;
     private String cpf;
+    private int codigo;
+    private String chave;
 }

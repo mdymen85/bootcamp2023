@@ -1,8 +1,9 @@
 package com.matera.bootcamp2023.controller;
 
 import com.matera.bootcamp2023.domain.Conta;
-import com.matera.bootcamp2023.dto.ContaDto;
+import com.matera.bootcamp2023.dto.ContaResponseDto;
 import com.matera.bootcamp2023.dto.ContaRequestDto;
+import com.matera.bootcamp2023.dto.PixDto;
 import com.matera.bootcamp2023.repository.ContaRepository;
 import com.matera.bootcamp2023.service.ContaService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,8 @@ public class ContaController {
     private final ContaService contaService;
 
     @PostMapping
-    public ContaDto criarConta(@RequestBody ContaRequestDto requestDto) throws InterruptedException {
+    public ContaResponseDto criarConta(@RequestBody ContaRequestDto requestDto) {
         Conta conta = contaService.criarConta(requestDto);
-        conta.setNumero(6543);
         return conta.toContaDto();
     }
 
@@ -48,29 +48,35 @@ public class ContaController {
 //    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ContaDto> procuraContaPorIdSemTry(@PathVariable Long id) {
+    public ResponseEntity<ContaResponseDto> procuraContaPorIdSemTry(@PathVariable Long id) {
         Conta conta = contaService.procuraConta(id);
         return ResponseEntity.ok(conta.toContaDto());
     }
 
     @PostMapping("/{idConta}/credito/{valor}")
-    public ResponseEntity<ContaDto> creditarConta(@PathVariable Long idConta, @PathVariable BigDecimal valor) {
+    public ResponseEntity<ContaResponseDto> creditarConta(@PathVariable Long idConta, @PathVariable BigDecimal valor) {
         Conta conta = contaService.creditarConta(idConta, valor);
         return ResponseEntity.ok(conta.toContaDto());
     }
 
     @PostMapping("/{idConta}/debito/{valor}")
-    public ResponseEntity<ContaDto> debitaConta(@PathVariable Long idConta, @PathVariable BigDecimal valor) {
+    public ResponseEntity<ContaResponseDto> debitaConta(@PathVariable Long idConta, @PathVariable BigDecimal valor) {
         Conta conta = contaService.debitaConta(idConta, valor);
         return ResponseEntity.ok(conta.toContaDto());
     }
 
 
     @PostMapping("/{idContaDebitada}/{idContaCreditada}/{valor}")
-    public ResponseEntity debitaConta(@PathVariable Long idContaDebitada,
-                                      @PathVariable Long idContaCreditada,
-                                      @PathVariable BigDecimal valor) {
+    public ResponseEntity debitaConta(@PathVariable Long idContaDebitada, @PathVariable Long idContaCreditada, @PathVariable BigDecimal valor) {
         contaService.transferencia(idContaDebitada, idContaCreditada, valor);
         return ResponseEntity.ok("Transferencia realizada com sucesso");
+    }
+
+    @PostMapping("/{idContaDebitada}/{chavePix}")
+    public ResponseEntity debitaConta(@PathVariable Long idContaDebitada,
+                                      @PathVariable String chavePix,
+                                      @RequestBody PixDto pixDto) {
+        contaService.pix(idContaDebitada, chavePix, pixDto.getValor());
+        return ResponseEntity.ok("Pix realizada com sucesso");
     }
 }
